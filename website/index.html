@@ -2,10 +2,11 @@
 
 <html>
 	<head>
-		<title>Ada 4 EVR</title>
+		<title>A4EVR Pool</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="icon" type="image/png" href="images/adalogo.png">
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -33,6 +34,24 @@
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
 						</nav>
+						</div>
+
+<!-- X Logo -->
+<div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
+    <a href="https://x.com/A4EVRpool" target="_blank" rel="noopener noreferrer" 
+       style="text-decoration: none; display: inline-block; border: none;">
+        <img src="images/x-logo.png" alt="X Logo" 
+             style="width:20px; height:auto; display: block; border: none; transition: transform 0.3s, opacity 0.3s;">
+    </a>
+</div>
+
+<style>
+    a img:hover {
+        transform: scale(1.1); /* Slightly enlarges the image */
+        opacity: 0.8; /* Slightly dims the image */
+    }
+</style>
+
 					</header>
 
 				<!-- Main -->
@@ -50,7 +69,11 @@
 							<article id="work">
 								<h2 class="major">Pool Stats</h2>
 								<span class="image main"><img src="images/stats.webp" alt="" /></span>
-								<p>Single pool operator <br> Variable Fee: 0% <br>Pledge: 125,000 ₳ <br> Active Stake: 2.43M ₳ <br> Recent ROA: 1.8% <br> Delegators: 10 <br> Lifetime Blocks: 66  </p>
+								<p>Single pool operator <br> Variable Fee: 0% <br>Pledge: 125,000 ₳ <br>
+							Active Stake: <span id="activeStake">Loading...</span> <br> 
+              Recent ROA: <span id="recentROA">Loading...</span> <br> 
+              Delegators: <span id="delegators">Loading...</span> <br> 
+              Lifetime Blocks: <span id="lifetimeBlocks">Loading...</span>  </p>
 								
 							</article>
 
@@ -352,6 +375,31 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+      <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function fetchData() {
+            fetch('https://js.cexplorer.io/api-static/pool/pool1k2cj852umvq5f527x9u7p58mnletdzx29gr4e4npv4nc6m3hch9.json')
+            .then(response => response.json())
+            .then(data => {
+                // Extract values from the JSON object
+                const activeStake = (data.data.stake_active / 1000000000000).toFixed(2) + 'M';  // Convert to millions for display
+                const recentROA = (data.data.roa_short * 1).toFixed(2) + '%';  // Convert to percentage
+                const delegators = data.data.delegators;
+                const lifetimeBlocks = data.data.blocks_lifetime;
+
+                // Update the DOM elements with new data
+                document.getElementById('activeStake').textContent = activeStake + ' ₳';
+                document.getElementById('recentROA').textContent = recentROA;
+                document.getElementById('delegators').textContent = delegators;
+                document.getElementById('lifetimeBlocks').textContent = lifetimeBlocks;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        fetchData(); // Fetch data on page load
+      
+    });
+    </script>
 
 	</body>
 </html>

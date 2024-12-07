@@ -692,66 +692,32 @@ input, select, textarea {
 				width: 100%;
 			}
 
-			.image.main {
-				display: block;
-				margin: 2.5rem 0;
-				width: 100%;
-			}
-			
-			.image.main img {
-				width: 100%;
-			}
-			
-			/* Specific adjustment for #work image */
-			#work .image.main img {
-				width: 100%; /* Full width of the container */
-				height: auto; /* Maintain aspect ratio */
-				max-height: 200px; /* Adjust downward height as needed */
-				object-fit: cover; /* Ensures it fits without distortion */
-			}
-			
-			/* Specific adjustment for #intro image */
-			#intro .image.main img {
-				width: 100%; /* Full width of the container */
-				height: auto; /* Maintain aspect ratio */
-				max-height: 200px; /* Adjust downward height as needed */
-				object-fit: cover;
-			}
-			
-			/* Specific adjustment for #about image */
-			#about .image.main img {
-				width: 100%; /* Full width of the container */
-				height: auto; /* Maintain aspect ratio */
-				max-height: 200px; /* Adjust downward height as needed */
-				object-fit: cover;
-			}
-			
-			@media screen and (max-width: 736px) {
-				.image.main {
-					margin: 2rem 0;
-				}
-			
-				/* Optional adjustments for smaller screens */
-				#work .image.main img,
-				#intro .image.main img,
-				#about .image.main img {
-					max-height: 400px; /* Further reduce height on smaller devices */
-				}
-			}
-			
-			@media screen and (max-width: 480px) {
-				.image.main {
-					margin: 1.5rem 0;
-				}
-			
-				/* Optional adjustments for very small screens */
-				#work .image.main img,
-				#intro .image.main img,
-				#about .image.main img {
-					max-height: 300px; /* Further reduce height for very small devices */
-				}
-			}
-			
+		.image.main {
+    display: block;
+    margin: 2.5rem 0;
+    width: 100%;
+}
+
+.image.main img {
+    width: 100%; /* Full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 200px; /* Maximum height for all devices */
+    object-fit: cover; /* Ensures it fits without distortion */
+}
+
+/* Adjust margins for smaller screens */
+@media screen and (max-width: 736px) {
+    .image.main {
+        margin: 2rem 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .image.main {
+        margin: 1.5rem 0;
+    }
+}
+	
 			
 
 /* List */
