@@ -19,10 +19,10 @@ This script automates the setup and deployment of a containerized Orcfax ITN Pha
    git clone <repository-url>
    cd <repository-directory>
 
-2. Make the script executable. 
+2. Make the script executable: 
     ```bash
- chmod +x create_orcfax_node.sh
- 
-3. Run the script. 
-    ```bash
-  ./create_orcfax_node.sh
+   chmod +x create_orcfax_node.sh
+   
+3. Run the script: 
+ ```bash
+   ./create_orcfax_node.sh
