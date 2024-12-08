@@ -8,8 +8,8 @@ From start to finish, the node should be operational in about 1-2 minutes.
 
 - Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`).
 - Generates `node.env` and dummy database file (`notused.db`).
-- Generates a `Dockerfile` and an entrypoint script `start.sh`
-- Builds Docker container image, deploys, and starts the collector node
+- Generates a `Dockerfile` and an entrypoint script `start.sh`.
+- Builds Docker container image, deploys, and starts the collector node.
 
 ## Prerequisites
 
