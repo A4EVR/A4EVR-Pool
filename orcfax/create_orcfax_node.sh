@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Orcfax Node Deployment Script
+# Created by A4EVR
+# This script is free to use under the MIT License, available at: https://opensource.org/licenses/MIT
+
 # Exit on error
 set -e
 
