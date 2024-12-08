@@ -7,8 +7,9 @@ From start to finish, the node should be operational in about 1-2 minutes.
 ## Features
 
 - Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`).
-- Automatically generates the necessary `node.env` configuration file.
-- Creates a dummy database file (`notused.db`).
+- Generates `node.env` and dummy database file (`notused.db`).
+- Generates a `Dockerfile` and an entrypoint script `start.sh`
+- Builds Docker container image, deploys, and starts the collector node
 
 ## Prerequisites
 
@@ -35,7 +36,7 @@ From start to finish, the node should be operational in about 1-2 minutes.
 
     Provide a unique node name (e.g., `node1`). This will make a directory `~/orcfax/<your-node-name>`.
     
-    Specify the directory containing your payment keys. This will copy the keys to newly created signing-key folder.
+    Specify the directory containing your payment keys. This will copy the keys to a newly created `signing-key` folder.
 
 
 ## Happy Collecting!
