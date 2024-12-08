@@ -4,24 +4,28 @@ This script automates the setup and deployment of a containerized Orcfax ITN Pha
 
 ## Features
 
-- Downloads all required files (collector-node, gofer, cer-feeds.json).
+- Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`).
 - Automatically generates the necessary `node.env` configuration file.
 - Creates a dummy database file (`notused.db`).
 
 ## Prerequisites
 
-- Payment keys (`payment.skey` and `payment.vkey`) already generated and accessible.
+- Payment keys (`payment.skey` and `payment.vkey`) must be pre-generated and accessible.
 
 ## Usage
 
-1. Download the create_orcfax_node script:
+1. Download the `create_orcfax_node` script:
     ```bash
-   wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/create_orcfax_node.sh
-   
-2. Make the script executable: 
+    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/create_orcfax_node.sh
+    ```
+
+2. Make the script executable:
     ```bash
-   chmod +x create_orcfax_node.sh
-   
-3. Run the script: 
- ```bash
-   ./create_orcfax_node.sh
+    chmod +x create_orcfax_node.sh
+    ```
+
+3. Run the script:
+    ```bash
+    ./create_orcfax_node.sh
+    ```
+## Happy Collecting!
