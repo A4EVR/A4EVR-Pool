@@ -14,11 +14,10 @@ This script automates the setup and deployment of a containerized Orcfax ITN Pha
 
 ## Usage
 
-1. Clone the repository:
+1. Download the create_orcfax_node script:
     ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-
+   wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/create_orcfax_node.sh
+   
 2. Make the script executable: 
     ```bash
    chmod +x create_orcfax_node.sh
