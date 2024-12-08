@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Orcfax Node Deployment Script
-# Created by A4EVR
-# This script is free to use under the MIT License, available at: https://opensource.org/licenses/MIT
+# Orcfax Node Deployment Script by A4EVR
 
 # Exit on error
 set -e
@@ -163,9 +161,6 @@ else
     exit 1
 fi
 
-# Ensure the Gofer binary is executable
-chmod +x /orcfax/$NODE_NAME/gofer/gofer
-
 # Check if .node-identity.json exists in /tmp
 if [ ! -f /tmp/.node-identity.json ]; then
     echo "Creating .node-identity.json..."
@@ -188,8 +183,6 @@ fi
 echo "Starting cron..."
 cron && tail -f /var/log/cron.log
 EOL
-
-chmod +x $NODE_DIR/start.sh || { echo "ERROR: Failed to set executable permission on start.sh"; exit 1; }
 
 # Step 12: Generate Dockerfile 
 echo "Generating Dockerfile in $NODE_DIR..."
