@@ -63,7 +63,7 @@ if ! command -v docker &> /dev/null; then
     sudo apt-get update
     sudo apt-get install -y docker.io
     
-    # Start and enable the Docker service
+# Start and enable the Docker service
     echo "Starting and enabling Docker service..."
     sudo systemctl start docker
     sudo systemctl enable docker
@@ -221,7 +221,7 @@ COPY . .
 # Ensure the Gofer binary is executable
 RUN chmod +x /orcfax/$NODE_NAME/gofer/gofer
 
-# Fix Python symlink issues
+# Ensure Python symlink 
 RUN ln -sf /usr/local/bin/python3 /usr/bin/python3
 
 # Set up the Python virtual environment and install requirements
