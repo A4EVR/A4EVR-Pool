@@ -62,6 +62,11 @@ if ! command -v docker &> /dev/null; then
     echo "Docker not found, installing..."
     sudo apt-get update
     sudo apt-get install -y docker.io
+    
+    # Start and enable the Docker service
+    echo "Starting and enabling Docker service..."
+    sudo systemctl start docker
+    sudo systemctl enable docker
 fi
 
 # Enable Docker Buildx if not already enabled
