@@ -1,6 +1,6 @@
 # Orcfax Node Deployment Script
 
-This script automates the setup and deployment of a containerized Orcfax ITN Phase 1 node. It downloads required components, generates and configures files/environment variables, and deploys the container node. From start to finish, the node will be operational in about 1-2 minutes.
+This script automates the setup and deployment of a containerized Orcfax ITN Phase 1 node. It downloads required components, generates and configures files/environment variables, and deploys the container node. From start to finish, the node should be operational in about 1-2 minutes.
 
 ## Features
 
