@@ -31,7 +31,7 @@ This script automates the setup and deployment of a containerized Orcfax ITN Pha
 
 4. Follow the terminal prompts to:
 
-    Provide a unique node name (e.g. node1). This will make a directory ~/orcfax/<your-node-name>
+    Provide a unique node name (e.g., `node1`). This will make a directory `~/orcfax/<your-node-name>`.
     
     Specify the directory containing your payment keys. This will copy the keys to newly created signing-key folder.
 
