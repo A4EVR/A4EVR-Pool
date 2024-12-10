@@ -15,7 +15,7 @@ The script serves two functions:
   - Total successful runs
   - Success rate
   - Mean and median collection durations
-  - Allows users to process the entire log or the last n hours for targeted analysis.
+  - Allows users to process the entire log or the last `n` hours for targeted analysis.
     
 **Log Behavior**
 
