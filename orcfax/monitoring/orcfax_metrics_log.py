@@ -89,8 +89,9 @@ def process_log_file(log_file_path, hours=None):
     mean_duration = sum(durations) / total_successful_runs if total_successful_runs else 0
     median_duration = sorted(durations)[total_successful_runs // 2] if total_successful_runs % 2 == 1 else \
         (sorted(durations)[(total_successful_runs // 2) - 1] + sorted(durations)[total_successful_runs // 2]) / 2
+    runs_over_60_seconds = len([duration for duration in durations if duration > 60])
     runs_under_15_seconds = len([duration for duration in durations if duration < 15])
-
+    
     # Output results
     print(f"Log Start time: {start_time}")
     print(f"Log End time: {end_time}")
@@ -100,6 +101,7 @@ def process_log_file(log_file_path, hours=None):
     print(f"Success rate: {success_rate:.2f}%")
     print(f"Mean collection duration: {mean_duration:.2f} seconds")
     print(f"Median collection duration: {median_duration:.2f} seconds")
+    print(f"Number of runs over 60 seconds: {runs_over_60_seconds}")
     print(f"Number of runs under 15 seconds: {runs_under_15_seconds}")
 
 if __name__ == "__main__":
@@ -136,5 +138,6 @@ if __name__ == "__main__":
                 print("Invalid number of hours. Exiting.")
         except ValueError:
             print("Invalid input. Exiting.")
+
 
 
