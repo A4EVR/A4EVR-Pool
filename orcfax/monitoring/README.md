@@ -15,7 +15,7 @@
   - If no log data is present initially, allow some time for the collector to generate data before running the script again
 
 ### Recommended Setup
-1. Place the script in the `~/orcfax` directory:
+1. Download the script in the `~/orcfax` directory:
    ```bash
     mkdir -p ~/orcfax
     cd ~/orcfax
