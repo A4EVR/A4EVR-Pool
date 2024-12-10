@@ -95,7 +95,6 @@ def process_log_file(log_file_path, hours=None):
     # Output results
     print(f"Log Start time: {start_time}")
     print(f"Log End time: {end_time}")
-    print(f"Total hours in the log: {int(total_hours)}")
     print(f"Total run attempts (should be max 1/min): {run_attempts}")
     print(f"Total successful collection runs: {total_successful_runs}")
     print(f"Success rate: {success_rate:.2f}%")
