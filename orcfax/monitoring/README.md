@@ -1,14 +1,20 @@
 # Orcfax ITN1 Monitoring and Metrics Script
 
 ### orcfax_metrics_log.py
-**Purpose**: 
-  - Automates the creation of a log file for the Orcfax ITN1 collector node if one does not exist. 
-  - Analyzes the log file to provide performance metrics, such as:
-    - Total run attempts
-    - Success rate
-    - Mean and median durations
-    - Allows processing of the entire log or just the last `n` hours for performance analysis
-**Log Behavior**:
+**Purpose** 
+The script serves two functions:
+1. Log Creation:
+    Automatically creates a log file for the Orcfax ITN1 collector node if one does not already exist.
+    Appends Orcfax collector data from /var/log/syslog to the new log file.
+2. Performance Analysis:
+    Provides key metrics from the log, including:
+    Total run attempts
+    Success rate
+    Mean and median durations
+   
+    Allows users to process the entire log or the last n hours for targeted analysis.
+    
+**Log Behavior**
   - The script generates a log file by appending Orcfax collector data from `/var/log/syslog`.
   - The log file grows over time as new data is appended.
   - The script assumes the Orcfax collector is running and logging events to /var/log/syslog
