@@ -5,7 +5,7 @@
 	
 */
 
-html, body, div, span, applet, object,
+html, body, div, span, applet, object, 
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
 code, del, dfn, em, img, ins, kbd, q, s, samp,
@@ -1659,3 +1659,35 @@ input, select, textarea {
 		body.is-preload #footer {
 			opacity: 0;
 		}
+		
+/* X Logo Styles */
+body #x-logo {
+    position: fixed !important; /* Forces fixed positioning */
+    bottom: 20px !important;   /* Anchored to 20px from the bottom */
+    left: 50% !important;      /* Centers horizontally */
+    transform: translateX(-50%) !important; /* Adjusts alignment */
+    text-align: center !important;
+    z-index: 1000 !important;  /* Ensures it stays on top */
+    visibility: visible !important; /* Ensures visibility is set */
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* X Logo Image Styles */
+body #x-logo img {
+    width: 20px !important; /* Smaller size */
+    height: auto !important;
+    display: block !important;
+    transition: transform 0.3s, opacity 0.3s !important; /* Smooth hover effect */
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Hover Effect */
+body #x-logo img:hover {
+    transform: scale(1.1); /* Slightly enlarges the logo */
+    opacity: 0.8; /* Reduces opacity slightly */
+}
+
+
+

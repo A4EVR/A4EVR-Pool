@@ -1,66 +1,53 @@
 <!DOCTYPE HTML>
-
 <html>
-	<head>
-		<title>A4EVR Pool</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="icon" type="image/png" href="images/adalogo.png">
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<head>
+    <title>A4EVR Pool</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="preload" href="assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="icon" type="image/png" href="images/adalogo.png">
+    <noscript><link rel="stylesheet" href="assets/css/main.css"></noscript>
+</head>
+<body class="is-preload">
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+    <!-- Wrapper -->
+    <div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="">
-							<span class=""></span>
-						
-						<div class="">
-							<div class="inner">
-								<h1>₳ 4 EVR</h1>
-								<p>Welcome to A4EVR Cardano Stake Pool!<br /></p>
-							</div>
-						
-						<nav>
-							<ul>
-								<li><a href="#intro">₳4EVR</a></li>
-								<li><a href="#work">Pool Stats</a></li>
-								<li><a href="#about">Infrastructure</a></li>
+        <!-- Header -->
+        <header id="header">
+            <div>
+                <span></span>
+                <div>
+                    <div class="inner">
+                        <h1>₳ 4 EVR</h1>
+                        <p>Welcome to A4EVR Cardano Stake Pool!<br /></p>
+                    </div>
 
-								<!--<li><a href="#elements">Elements</a></li>-->
-							</ul>
-						</nav>
-						</div>
+                    <nav>
+                        <ul>
+                            <li><a href="#intro">₳4EVR</a></li>
+                            <li><a href="#work">Pool Stats</a></li>
+                            <li><a href="#about">Infrastructure</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
 
-<!-- X Logo -->
-<div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
-    <a href="https://x.com/A4EVRpool" target="_blank" rel="noopener noreferrer" 
-       style="text-decoration: none; display: inline-block; border: none;">
-        <img src="images/x-logo.png" alt="X Logo" 
-             style="width:20px; height:auto; display: block; border: none; transition: transform 0.3s, opacity 0.3s;">
-    </a>
-</div>
+        <!-- X Logo -->
+        <div id="x-logo" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 1000; visibility: visible; margin: 0; padding: 0;">
+            <a href="https://x.com/your-username" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                <img src="images/x-logo.png" alt="X Logo" style="width: 20px; height: auto; display: block; transition: transform 0.3s, opacity 0.3s; margin: 0; padding: 0;">
+            </a>
+        </div>
 
-<style>
-    a img:hover {
-        transform: scale(1.1); /* Slightly enlarges the image */
-        opacity: 0.8; /* Slightly dims the image */
-    }
-</style>
-
-					</header>
-
-				<!-- Main -->
-					<div id="main">
+        <!-- Main -->
+        <div id="main">
 
 						<!-- Intro -->
 							<article id="intro">
 								<h2 class="major">ADA Forever</h2>
-								<span class="image main"><img src="images/diam.webp" alt="" /></span>
+								<span class="image main"><img src="images/diam1.jpg" alt="" /></span>
 								<p>We are humble Cardano fans, operating a single pool at 0% margin - always.</p> We believe in Cardano's principals of scientific rigor, formal methods, fixed 45B supply, world-class liquid staking, security, and commitment to community governance. Because we share these values we have dedicated our time to this ecosystem, operating this pool as one of our contributions. </p>
 								<p>Please consider delegating to our pool. Earn rewards while supporting Cardano's decentralization!</p>
 							</article>
@@ -369,6 +356,20 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		<!-- BG -->
 			<div id="bg"></div>
 
+		<!-- Add JavaScript to ensure correct positioning -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const xLogo = document.getElementById("x-logo");
+                xLogo.style.position = "fixed";
+                xLogo.style.bottom = "20px";
+                xLogo.style.left = "50%";
+                xLogo.style.transform = "translateX(-50%)";
+                xLogo.style.textAlign = "center";
+                xLogo.style.zIndex = "1000";
+                xLogo.style.visibility = "visible";
+            });
+        </script>
+
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>
@@ -397,9 +398,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
         }
 
         fetchData(); // Fetch data on page load
-      
     });
     </script>
-
 	</body>
 </html>
