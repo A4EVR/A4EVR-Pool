@@ -21,7 +21,9 @@ Deployment
 - Uses Docker Compose to configure and link services:
 
 `Cardano-node`
+
 `Ogmios`
+
 `Orcfax collector` 
 
 - Deploys and starts all services.
