@@ -1058,6 +1058,8 @@ fi
 echo "Starting cron..."
 cron && tail -f /var/log/cron.log
 EOL
+
+chmod +x $NODE_DIR/start.sh || { echo "ERROR: Failed to set executable permission on start.sh"; exit 1; }
 }
 
 generate_orcfax_dockerfile() {
@@ -1104,7 +1106,7 @@ RUN python3 -m venv /orcfax/$NODE_NAME/collector/venv && \\
     /orcfax/$NODE_NAME/collector/venv/bin/pip install /orcfax/$NODE_NAME/collector_node-2.0.1rc1-py3-none-any.whl
 
 # Create the cron job for $NODE_NAME
-RUN echo "* * * * * . /orcfax/$NODE_NAME/node.env && ORCFAX_VALIDATOR=\\\$ORCFAX_VALIDATOR NODE_IDENTITY_LOC=\\\$NODE_IDENTITY_LOC NODE_SIGNING_KEY=\\\$NODE_SIGNING_KEY GOFER=\\\$GOFER CNT_DB_NAME=\\\$CNT_DB_NAME OGMIOS_URL=\\\$OGMIOS_URL /orcfax/$NODE_NAME/collector/venv/bin/python3 /orcfax/$NODE_NAME/collector/venv/bin/collector-node --feeds /orcfax/$NODE_NAME/cer-feeds.json 2>&1 | logger -t orcfax_collector" > /etc/cron.d/orcfax_cron && \\
+RUN echo "* * * * * root . /orcfax/$NODE_NAME/node.env && ORCFAX_VALIDATOR=\\\$ORCFAX_VALIDATOR NODE_IDENTITY_LOC=\\\$NODE_IDENTITY_LOC NODE_SIGNING_KEY=\\\$NODE_SIGNING_KEY GOFER=\\\$GOFER CNT_DB_NAME=\\\$CNT_DB_NAME OGMIOS_URL=\\\$OGMIOS_URL /orcfax/$NODE_NAME/collector/venv/bin/python3 /orcfax/$NODE_NAME/collector/venv/bin/collector-node --feeds /orcfax/$NODE_NAME/cer-feeds.json 2>&1 | logger -t orcfax_collector" > /etc/cron.d/orcfax_cron && \\
     chmod 0644 /etc/cron.d/orcfax_cron && \\
     crontab /etc/cron.d/orcfax_cron
 
@@ -1302,7 +1304,8 @@ write_log_file() {
         echo "  - Confirms the '.node-identity.json' file exists in '/tmp'."
         echo ""
         echo "## Verify Ogmios is active and connected to cardano-node:"
-        echo "curl -s $OGMIOS_URL/health | jq"
+        echo "curl -H 'Accept: application/json' $OGMIOS_URL/health | jq"
+        echo "View in browser: $OGMIOS_URL"
         echo ""
         echo "## Review and remove unused Docker images"
         echo "docker images"
