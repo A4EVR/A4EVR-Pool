@@ -19,9 +19,9 @@ Orcfax Collector
 
 Deployment
 - Uses Docker Compose to configure and link services:
-`Cardano-node`
-`Ogmios`
-`Orcfax collector` 
+- `Cardano-node`
+- `Ogmios`
+- `Orcfax collector` 
 - Deploys and starts all services.
 
 Estimated Completion Time
@@ -37,7 +37,7 @@ Estimated Completion Time
 
 1. Download the `orcfax_node_suite` script:
     ```bash
-    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/orcfax_node_suite.sh
+    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/node-suite/orcfax_node_suite.sh
     ```
 
 2. Make the script executable:
@@ -53,16 +53,20 @@ Estimated Completion Time
 4. Follow the terminal prompts to:
     
     Initial Setup:
+    
     Provide a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
 
     Cardano-node Setup:
+    
     Choose to configure an existing `cardano-node`. Select the detected `node.socket` path or enter an existing path.
     Or optionally deploy a new cardano-node using a `CARDANO_OGMIOS_CONTAINER`. Enter an existing `cardano db` path or use Mithril to fast bootstrap the database.
     
     Ogmios Setup:
+    
     Choose to deploy a new `STANDALONE_OGMIOS_CONTAINER` or configure an existing instance.
 
     Orcfax Collector Node Setup:
+    
     Specify the directory containing your alias keys. This will copy the keys to a newly created `signing-key` folder.
 
 ## Additional Notes
