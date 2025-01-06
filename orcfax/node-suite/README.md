@@ -56,20 +56,22 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
     
 4. Follow the terminal prompts to:
     
-    Initial Setup:
+    **Initial Setup:**
     
     Provide a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
 
-    Cardano-node Setup:
+    **Cardano-node Setup:**
     
-    Choose to configure an existing `cardano-node`. Select the detected `node.socket` path or enter an existing path.
-    Or optionally deploy a new cardano-node using a `CARDANO_OGMIOS_CONTAINER`. Enter an existing `cardano db` path or use Mithril to fast bootstrap the database.
+    Option 1: Choose to configure an existing `cardano-node`. Select the detected `node.socket` path or enter an existing path.
     
-    Ogmios Setup:
+    Option 2: Choose to deploy a new cardano-node using a `CARDANO_OGMIOS_CONTAINER`. 
+              Enter an existing `cardano db` path or use Mithril to fast bootstrap the database.
+    
+    **Ogmios Setup:**
     
     Choose to deploy a new `STANDALONE_OGMIOS_CONTAINER` or configure an existing instance.
 
-    Orcfax Collector Node Setup:
+    **Orcfax Collector Node Setup:**
     
     Specify the directory containing your alias keys. This will copy the keys to a newly created `signing-key` folder.
 
