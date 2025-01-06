@@ -199,6 +199,7 @@ RUN apt-get update && apt-get install -y \\
     cron \\
     procps \\
     rsyslog \\
+    nano \\
     && rm -rf /var/lib/apt/lists/*
 
 # Create a log file for cron

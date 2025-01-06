@@ -1,42 +1,22 @@
-# Orcfax Node Deployment Script
+# Orcfax Project
 
-This script automates the setup and deployment of a containerized Orcfax ITN Phase 1 node. It downloads required components, generates and configures files/environment variables, and deploys the container node. 
+This repository contains tools and scripts to set up and monitor Orcfax ITN nodes.
 
-From start to finish, the node should be operational in about 1-2 minutes.
+## Components
 
-## Features
+1. **[Create Collector](create-collector/README.md)**:
+   - Automates the setup of an Orcfax ITN Phase 1 collector node.
+   - Script: `create_orcfax_node.sh`
 
-- Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`).
-- Generates `node.env` and dummy database file (`notused.db`).
-- Generates a `Dockerfile` and an entrypoint script `start.sh`.
-- Builds Docker container image, deploys, and starts the collector node.
+2. **[Node Suite](node-suite/README.md)**:
+   - Deploys and configures `cardano-node`, `Ogmios`, and the Orcfax collector in one script.
+   - Script: `orcfax_node_suite.sh`
 
-## Prerequisites
+3. **[Monitoring](monitoring/README.md)**:
+   - Tools for monitoring Orcfax metrics.
+   - Script: `orcfax_metrics_log.py`
 
-- Payment keys (`payment.skey` and `payment.vkey`) must be pre-generated and accessible.
+## Getting Started
 
-## Usage
+Each component has its own README with detailed setup instructions.
 
-1. Download the `create_orcfax_node` script:
-    ```bash
-    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/main/orcfax/create_orcfax_node.sh
-    ```
-
-2. Make the script executable:
-    ```bash
-    chmod +x create_orcfax_node.sh
-    ```
-
-3. Run the script:
-    ```bash
-    ./create_orcfax_node.sh
-    ```
-
-4. Follow the terminal prompts to:
-
-    Provide a unique node name (e.g., `node1`). This will make a directory `~/orcfax/<your-node-name>`.
-    
-    Specify the directory containing your payment keys. This will copy the keys to a newly created `signing-key` folder.
-
-
-## Happy Collecting!
