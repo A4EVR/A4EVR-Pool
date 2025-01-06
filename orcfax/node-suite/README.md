@@ -58,7 +58,21 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
     
     **Initial Setup:**
     
-    Provide a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
+    The script will update your system's package list using `sudo apt-get update`.
+    
+    Install the following dependencies if they are not already installed:
+   - `curl`
+   - `git`
+   - `jq`
+   - `apt-transport-https`
+   - `ca-certificates`
+   - `software-properties-common`
+   - `docker-ce`
+   - `docker-ce-cli`
+   - `containerd.io`
+   - `docker-compose-plugin`
+    
+    Enter a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
 
     **Cardano-node Setup:**
     
