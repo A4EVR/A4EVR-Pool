@@ -4,20 +4,20 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
 
 ## Features
 
-### Cardano-node
+**Cardano-node**
 - Configures an existing `cardano-node` for Orcfax integration.
 - Optionally deploys a new node using a combined cardano-node + Ogmios container. Supports fast database bootstrapping with `Mithril`.
 
-### Ogmios
+**Ogmios**
 - Creates a new Ogmios container or configures an existing instance.
 
-### Orcfax Collector
+**Orcfax Collector**
 - Downloads required files (`collector-node`, `gofer`, `cer-feeds.json`).
 - Generates `node.env` and dummy database file (`notused.db`).
 - Generates a `Dockerfile` and an entrypoint script `start.sh`.
 - Builds Docker container image.
 
-### Deployment
+**Deployment**
 - Uses Docker Compose to configure and link services:
 
 `Cardano-node`
@@ -28,7 +28,7 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
 
 - Deploys and starts all services.
 
-### Estimated Completion Time
+**Estimated Completion Time**
 - Using an existing cardano-node: <5 minutes.
 - Deploying a new cardano-node with Mithril bootstrapping: ~1 hour.
 
