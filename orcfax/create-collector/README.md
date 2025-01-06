@@ -6,14 +6,14 @@ From start to finish, the node should be operational in about 1-2 minutes.
 
 ## Features
 
-- Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`).
+- Downloads all required files (`collector-node`, `gofer`, `cer-feeds.json`). **Versions manually defined at top of script.**
 - Generates `node.env` and dummy database file (`notused.db`).
 - Generates a `Dockerfile` and an entrypoint script `start.sh`.
 - Builds Docker container image, deploys, and starts the collector node.
 
 ## Prerequisites
 
-- Payment keys (`payment.skey` and `payment.vkey`) must be pre-generated and accessible.
+- Alias payment keys (`payment.skey` and `payment.vkey`) must be pre-generated and accessible.
 
 ## Usage
 
@@ -34,9 +34,23 @@ From start to finish, the node should be operational in about 1-2 minutes.
 
 4. Follow the terminal prompts to:
 
-    Provide a unique node name (e.g., `node1`). This will make a directory `~/orcfax/<your-node-name>`.
+    The script will update your system's package list using `sudo apt-get update`.
     
-    Specify the directory containing your payment keys. This will copy the keys to a newly created `signing-key` folder.
+    Install the following dependencies if they are not already installed:
+   - `curl`
+   - `git`
+   - `jq`
+   - `apt-transport-https`
+   - `ca-certificates`
+   - `software-properties-common`
+   - `docker-ce`
+   - `docker-ce-cli`
+   - `containerd.io`
+   - `docker-compose-plugin`
+
+     Enter a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
+    
+    Specify the directory containing your alias payment keys. This will copy the keys to a newly created `signing-key` folder.
 
 
 ## Happy Collecting!
