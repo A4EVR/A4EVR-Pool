@@ -19,13 +19,9 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
 
 **Deployment**
 - Uses Docker Compose to configure and link services:
-
-`Cardano-node`
-
-`Ogmios`
-
-`Orcfax collector` 
-
+- `Cardano-node`
+- `Ogmios`
+- `Orcfax collector` 
 - Deploys and starts all services.
 
 **Estimated Completion Time**
