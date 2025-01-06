@@ -75,6 +75,10 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
     
     Specify the directory containing your alias keys. This will copy the keys to a newly created `signing-key` folder.
 
+    **Final Deployment:**
+    
+    Script will then run Docker Compose to configure, deploy, and start all services.
+
 ## Additional Notes
 
 Upon completion, a summary config log and helpful commands are outputted in the node directory (e.g., ~/orcfax/<node-name>)
@@ -83,6 +87,7 @@ Upon completion, a summary config log and helpful commands are outputted in the 
 
 v1.0.0:
 Initial release of Orcfax Node Suite script. Includes support for Cardano-node, Ogmios, and the Orcfax collector.
+
 
 
 ## Happy Collecting!
