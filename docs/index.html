@@ -1,406 +1,170 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-    <title>A4EVR Pool</title>
+  <head>
+    <title>Ada 4 EVR</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="preload" href="assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="icon" type="image/png" href="images/adalogo.png">
-    <noscript><link rel="stylesheet" href="assets/css/main.css"></noscript>
-</head>
-<body class="is-preload">
-
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/adalogo.png" />
+    <!-- NoScript fallback CSS -->
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+  </head>
+  
+  <body class="is-preload">
     <!-- Wrapper -->
     <div id="wrapper">
-
-        <!-- Header -->
-        <header id="header">
-            <div>
-                <span></span>
-                <div>
-                    <div class="inner">
-                        <h1>₳ 4 EVR</h1>
-                        <p>Welcome to A4EVR Cardano Stake Pool!<br /></p>
-                    </div>
-
-                    <nav>
-                        <ul>
-                            <li><a href="#intro">₳4EVR</a></li>
-                            <li><a href="#work">Pool Stats</a></li>
-                            <li><a href="#about">Infrastructure</a></li>
-                        </ul>
-                    </nav>
-                </div>
+      
+      <!-- Header -->
+      <header id="header">
+        <div class="">
+          <span class=""></span>
+          <div class="">
+            <div class="inner">
+              <h1>₳ 4 EVR</h1>
+              <p>Welcome to A4EVR Cardano Stake Pool!<br /></p>
             </div>
-        </header>
+            <nav>
+              <ul>
+                <li><a href="#intro">₳4EVR</a></li>
+                <li><a href="#work">Pool Stats</a></li>
+                <li><a href="#about">Infrastructure</a></li>
+                <!-- <li><a href="#contact">Contact</a></li> -->
+              </ul>
+            </nav>
 
-        <!-- X Logo -->
-        <div id="x-logo" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 1000; visibility: visible; margin: 0; padding: 0;">
-            <a href="https://x.com/A4EVRpool" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-                <img src="images/x-logo.png" alt="X Logo" style="width: 20px; height: auto; display: block; transition: transform 0.3s, opacity 0.3s; margin: 0; padding: 0;">
-            </a>
+          </div>
         </div>
+      </header>
+      
+      <!-- Main -->
+      <div id="main">
+        
+        <!-- Intro -->
+        <article id="intro">
+          <h2 class="major">ADA Forever</h2>
+          <span class="image main">
+            <img src="images/diam1.jpg" alt="Diamond image" />
+          </span>
+          <p>
+            We are humble Cardano fans, operating a single pool at 0% margin - always.
+            We believe in Cardano's principals of scientific rigor, formal methods, fixed 45B supply,
+            world-class liquid staking, security, and commitment to community governance. Because we share these values
+            we have dedicated our time to this ecosystem, operating this pool as one of our contributions.
+          </p>
+          <p>Please consider delegating to our pool. Earn rewards while supporting Cardano's decentralization!</p>
+        </article>
+        
+        <!-- Work -->
+        <article id="work">
+          <h2 class="major">Pool Stats</h2>
+          <span class="image main">
+            <img src="images/stats.webp" alt="Pool stats" />
+          </span>
+          <p>
+            Single pool operator <br>
+            Variable Fee: 0% <br>
+            Pledge: 125,000 ₳ <br>
+            Active Stake: <span id="activeStake">Loading...</span> <br>
+            Recent ROA: <span id="recentROA">Loading...</span> <br>
+            Delegators: <span id="delegators">Loading...</span> <br>
+            Lifetime Blocks: <span id="lifetimeBlocks">Loading...</span>
+          </p>
+        </article>
+        
+        <!-- About -->
+        <article id="about">
+          <h2 class="major">Infrastructure</h2>
+          <span class="image main">
+            <img src="images/farm.webp" alt="Farm" />
+          </span>
+          <p>
+            Designed to handle the unexpected, robust operations to deliver continuous uptime.
+          </p>
+          <p>
+            Block Production: local powerful bare metal servers + cloud standby <br>
+            Relays: local nodes + geographically spaced cloud relays <br>
+            Electricity: solar powered + long-duration battery storage <br>
+            Network: fiber internet connectivity + radiowave 5g backup
+          </p>
+        </article>
+        
+        <!-- Contact -->
+        <article id="contact">
+          <h2 class="major">Contact</h2>
+          <form method="post" action="#">
+            <div class="fields">
+              <div class="field half">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" />
+              </div>
+              <div class="field half">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" />
+              </div>
+              <div class="field">
+                <label for="message">Message</label>
+                <textarea name="message" id="message" rows="4"></textarea>
+              </div>
+            </div>
+            <ul class="actions">
+              <li><input type="submit" value="Send Message" class="primary" /></li>
+              <li><input type="reset" value="Reset" /></li>
+            </ul>
+          </form>
+        </article>
+        
+      </div> <!-- /#main -->
 
-        <!-- Main -->
-        <div id="main">
-
-						<!-- Intro -->
-							<article id="intro">
-								<h2 class="major">ADA Forever</h2>
-								<span class="image main">
-    <img src="images/diam1.jpg" alt="" loading="lazy" />
-</span>
-								<p>We are humble Cardano fans, operating a single pool at 0% margin - always.</p> We believe in Cardano's principals of scientific rigor, formal methods, fixed 45B supply, world-class liquid staking, security, and commitment to community governance. Because we share these values we have dedicated our time to this ecosystem, operating this pool as one of our contributions. </p>
-								<p>Please consider delegating to our pool. Earn rewards while supporting Cardano's decentralization!</p>
-							</article>
-
-						<!-- Work -->
-							<article id="work">
-								<h2 class="major">Pool Stats</h2>
-								<span class="image main"><img src="images/stats.webp" alt="" /></span>
-								<p>Single pool operator <br> Variable Fee: 0% <br>Pledge: 125,000 ₳ <br>
-							Active Stake: <span id="activeStake">Loading...</span> <br> 
-              Recent ROA: <span id="recentROA">Loading...</span> <br> 
-              Delegators: <span id="delegators">Loading...</span> <br> 
-              Lifetime Blocks: <span id="lifetimeBlocks">Loading...</span>  </p>
-								
-							</article>
-
-						<!-- About -->
-							<article id="about">
-								<h2 class="major">Infrastructure</h2>
-								<span class="image main"><img src="images/farm.webp" alt="" /></span>
-								<p>Designed to handle the unexpected, robust operations to deliver continuous uptime.<p> Block Production: local powerful bare metal servers + cloud standby <br> Relays: local nodes + geographically spaced cloud relays <br> Electricity: solar powered + long-duration battery storage <br> Network: fiber internet connectivity + radiowave 5g backup </p>
-							</article>
-
-						<!-- Contact -->
-							<article id="contact">
-								<h2 class="major">Contact</h2>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="4"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Reset" /></li>
-									</ul>
-								</form>
-								<ul class="icons">
-									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-								</ul>
-							</article>
-
-						<!-- Elements -->
-							<article id="elements">
-								<h2 class="major">Elements</h2>
-
-								<section>
-									<h3 class="major">Text</h3>
-									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
-									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
-									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
-									<hr />
-									<h2>Heading Level 2</h2>
-									<h3>Heading Level 3</h3>
-									<h4>Heading Level 4</h4>
-									<h5>Heading Level 5</h5>
-									<h6>Heading Level 6</h6>
-									<hr />
-									<h4>Blockquote</h4>
-									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
-									<h4>Preformatted</h4>
-									<pre><code>i = 0;
-
-while (!deck.isInOrder()) {
-    print 'Iteration ' + i;
-    deck.shuffle();
-    i++;
-}
-
-print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
-								</section>
-
-								<section>
-									<h3 class="major">Lists</h3>
-
-									<h4>Unordered</h4>
-									<ul>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Sagittis adipiscing.</li>
-										<li>Felis enim feugiat.</li>
-									</ul>
-
-									<h4>Alternate</h4>
-									<ul class="alt">
-										<li>Dolor pulvinar etiam.</li>
-										<li>Sagittis adipiscing.</li>
-										<li>Felis enim feugiat.</li>
-									</ul>
-
-									<h4>Ordered</h4>
-									<ol>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Etiam vel felis viverra.</li>
-										<li>Felis enim feugiat.</li>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Etiam vel felis lorem.</li>
-										<li>Felis enim et feugiat.</li>
-									</ol>
-									<h4>Icons</h4>
-									<ul class="icons">
-										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-									</ul>
-
-									<h4>Actions</h4>
-									<ul class="actions">
-										<li><a href="#" class="button primary">Default</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-									<ul class="actions stacked">
-										<li><a href="#" class="button primary">Default</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-								</section>
-
-								<section>
-									<h3 class="major">Table</h3>
-									<h4>Default</h4>
-									<div class="table-wrapper">
-										<table>
-											<thead>
-												<tr>
-													<th>Name</th>
-													<th>Description</th>
-													<th>Price</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Item One</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Two</td>
-													<td>Vis ac commodo adipiscing arcu aliquet.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Three</td>
-													<td> Morbi faucibus arcu accumsan lorem.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Four</td>
-													<td>Vitae integer tempus condimentum.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Five</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="2"></td>
-													<td>100.00</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
-
-									<h4>Alternate</h4>
-									<div class="table-wrapper">
-										<table class="alt">
-											<thead>
-												<tr>
-													<th>Name</th>
-													<th>Description</th>
-													<th>Price</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Item One</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Two</td>
-													<td>Vis ac commodo adipiscing arcu aliquet.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Three</td>
-													<td> Morbi faucibus arcu accumsan lorem.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Four</td>
-													<td>Vitae integer tempus condimentum.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Five</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="2"></td>
-													<td>100.00</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
-								</section>
-
-								<section>
-									<h3 class="major">Buttons</h3>
-									<ul class="actions">
-										<li><a href="#" class="button primary">Primary</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-									<ul class="actions">
-										<li><a href="#" class="button">Default</a></li>
-										<li><a href="#" class="button small">Small</a></li>
-									</ul>
-									<ul class="actions">
-										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
-										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
-									</ul>
-									<ul class="actions">
-										<li><span class="button primary disabled">Disabled</span></li>
-										<li><span class="button disabled">Disabled</span></li>
-									</ul>
-								</section>
-
-								<section>
-									<h3 class="major">Form</h3>
-									<form method="post" action="#">
-										<div class="fields">
-											<div class="field half">
-												<label for="demo-name">Name</label>
-												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
-											</div>
-											<div class="field half">
-												<label for="demo-email">Email</label>
-												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
-											</div>
-											<div class="field">
-												<label for="demo-category">Category</label>
-												<select name="demo-category" id="demo-category">
-													<option value="">-</option>
-													<option value="1">Manufacturing</option>
-													<option value="1">Shipping</option>
-													<option value="1">Administration</option>
-													<option value="1">Human Resources</option>
-												</select>
-											</div>
-											<div class="field half">
-												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
-												<label for="demo-priority-low">Low</label>
-											</div>
-											<div class="field half">
-												<input type="radio" id="demo-priority-high" name="demo-priority">
-												<label for="demo-priority-high">High</label>
-											</div>
-											<div class="field half">
-												<input type="checkbox" id="demo-copy" name="demo-copy">
-												<label for="demo-copy">Email me a copy</label>
-											</div>
-											<div class="field half">
-												<input type="checkbox" id="demo-human" name="demo-human" checked>
-												<label for="demo-human">Not a robot</label>
-											</div>
-											<div class="field">
-												<label for="demo-message">Message</label>
-												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
-											</div>
-										</div>
-										<ul class="actions">
-											<li><input type="submit" value="Send Message" class="primary" /></li>
-											<li><input type="reset" value="Reset" /></li>
-										</ul>
-									</form>
-								</section>
-
-							</article>
-
-					</div>
-
-				<!-- Footer -->
-					<footer id="footer">
-						<p class="copyright"></p>
-					</footer>
-
-			</div>
-
-		<!-- BG -->
-			<div id="bg"></div>
-
-		<!-- Add JavaScript to ensure correct positioning -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const xLogo = document.getElementById("x-logo");
-                xLogo.style.position = "fixed";
-                xLogo.style.bottom = "20px";
-                xLogo.style.left = "50%";
-                xLogo.style.transform = "translateX(-50%)";
-                xLogo.style.textAlign = "center";
-                xLogo.style.zIndex = "1000";
-                xLogo.style.visibility = "visible";
-            });
-        </script>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-      <script>
-    document.addEventListener('DOMContentLoaded', function() {
+      <!-- Footer -->
+      <footer id="footer">
+        <ul class="icons">
+      <!-- X link with custom class "no-circle" -->
+        <li>
+          <a href="https://x.com/A4EVRpool" target="_blank" rel="noopener" class="no-circle">
+  <img src="images/x-logo.png" alt="X Logo" class="icon-x" />
+ 
+          </a>
+        </li>
+             <!-- Add more icons here if desired -->
+        </ul>
+      </footer>
+      
+    </div> <!-- /#wrapper -->
+    
+    <!-- BG (overlay background, if used by template) -->
+    <div id="bg"></div>
+    
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <!-- Custom script to fetch Pool Stats -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
         function fetchData() {
-            fetch('https://js.cexplorer.io/api-static/pool/pool1k2cj852umvq5f527x9u7p58mnletdzx29gr4e4npv4nc6m3hch9.json')
+          fetch('https://js.cexplorer.io/api-static/pool/pool1k2cj852umvq5f527x9u7p58mnletdzx29gr4e4npv4nc6m3hch9.json')
             .then(response => response.json())
             .then(data => {
-                // Extract values from the JSON object
-                const activeStake = (data.data.stake_active / 1000000000000).toFixed(2) + 'M';  // Convert to millions for display
-                const recentROA = (data.data.roa_short * 1).toFixed(2) + '%';  // Convert to percentage
-                const delegators = data.data.delegators;
-                const lifetimeBlocks = data.data.blocks_lifetime;
-
-                // Update the DOM elements with new data
-                document.getElementById('activeStake').textContent = activeStake + ' ₳';
-                document.getElementById('recentROA').textContent = recentROA;
-                document.getElementById('delegators').textContent = delegators;
-                document.getElementById('lifetimeBlocks').textContent = lifetimeBlocks;
+              const activeStake = (data.data.stake_active / 1000000000000).toFixed(2) + 'M';  
+              const recentROA = (data.data.roa_short * 1).toFixed(2) + '%';  
+              const delegators = data.data.delegators;
+              const lifetimeBlocks = data.data.blocks_lifetime;
+              
+              document.getElementById('activeStake').textContent = activeStake + ' ₳';
+              document.getElementById('recentROA').textContent = recentROA;
+              document.getElementById('delegators').textContent = delegators;
+              document.getElementById('lifetimeBlocks').textContent = lifetimeBlocks;
             })
             .catch(error => console.error('Error fetching data:', error));
         }
-
-        fetchData(); // Fetch data on page load
-    });
+        fetchData(); // Trigger data fetch on page load
+      });
     </script>
-	</body>
+  </body>
 </html>
+

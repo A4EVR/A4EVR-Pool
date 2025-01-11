@@ -5,7 +5,7 @@
 	
 */
 
-html, body, div, span, applet, object, 
+html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
 code, del, dfn, em, img, ins, kbd, q, s, samp,
@@ -692,32 +692,66 @@ input, select, textarea {
 				width: 100%;
 			}
 
-		.image.main {
-    display: block;
-    margin: 2.5rem 0;
-    width: 100%;
-}
-
-.image.main img {
-    width: 100%; /* Full width of the container */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 200px; /* Maximum height for all devices */
-    object-fit: cover; /* Ensures it fits without distortion */
-}
-
-/* Adjust margins for smaller screens */
-@media screen and (max-width: 736px) {
-    .image.main {
-        margin: 2rem 0;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .image.main {
-        margin: 1.5rem 0;
-    }
-}
-	
+			.image.main {
+				display: block;
+				margin: 2.5rem 0;
+				width: 100%;
+			}
+			
+			.image.main img {
+				width: 100%;
+			}
+			
+			/* Specific adjustment for #work image */
+			#work .image.main img {
+				width: 100%; /* Full width of the container */
+				height: auto; /* Maintain aspect ratio */
+				max-height: 200px; /* Adjust downward height as needed */
+				object-fit: cover; /* Ensures it fits without distortion */
+			}
+			
+			/* Specific adjustment for #intro image */
+			#intro .image.main img {
+				width: 100%; /* Full width of the container */
+				height: auto; /* Maintain aspect ratio */
+				max-height: 200px; /* Adjust downward height as needed */
+				object-fit: cover;
+			}
+			
+			/* Specific adjustment for #about image */
+			#about .image.main img {
+				width: 100%; /* Full width of the container */
+				height: auto; /* Maintain aspect ratio */
+				max-height: 200px; /* Adjust downward height as needed */
+				object-fit: cover;
+			}
+			
+			@media screen and (max-width: 736px) {
+				.image.main {
+					margin: 2rem 0;
+				}
+			
+				/* Optional adjustments for smaller screens */
+				#work .image.main img,
+				#intro .image.main img,
+				#about .image.main img {
+					max-height: 400px; /* Further reduce height on smaller devices */
+				}
+			}
+			
+			@media screen and (max-width: 480px) {
+				.image.main {
+					margin: 1.5rem 0;
+				}
+			
+				/* Optional adjustments for very small screens */
+				#work .image.main img,
+				#intro .image.main img,
+				#about .image.main img {
+					max-height: 300px; /* Further reduce height for very small devices */
+				}
+			}
+			
 			
 
 /* List */
@@ -927,6 +961,45 @@ input, select, textarea {
 				ul.icons li a:active {
 					background-color: rgba(255, 255, 255, 0.175);
 				}
+
+/* ------------------ */
+/* X logo scaling     */
+/* ------------------ */
+.icon-x {
+  width: 24px;           /* Adjust icon size as needed */
+  height: auto;          
+  vertical-align: middle;
+  transition: transform 0.2s ease-in-out;
+}
+
+.icon-x:hover {
+  transform: scale(1.1); /* Slight "grow" on hover */
+}
+
+/* Remove circle for the X link */
+ul.icons li a.no-circle {
+  /* Kill the circular style */
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
+  /* Also let it auto-size for the logo instead of 2.25rem */
+  width: auto;
+  height: auto;
+  line-height: normal;
+  padding: 0;
+}
+
+/* Keep your transform scaling on hover for the X image */
+.icon-x {
+  width: 24px;
+  height: auto;
+  vertical-align: middle;
+  transition: transform 0.2s ease-in-out;
+}
+
+.icon-x:hover {
+  transform: scale(1.1);
+}
 
 /* Table */
 
@@ -1659,35 +1732,19 @@ input, select, textarea {
 		body.is-preload #footer {
 			opacity: 0;
 		}
-		
-/* X Logo Styles */
-body #x-logo {
-    position: fixed !important; /* Forces fixed positioning */
-    bottom: 20px !important;   /* Anchored to 20px from the bottom */
-    left: 50% !important;      /* Centers horizontally */
-    transform: translateX(-50%) !important; /* Adjusts alignment */
-    text-align: center !important;
-    z-index: 1000 !important;  /* Ensures it stays on top */
-    visibility: visible !important; /* Ensures visibility is set */
-    margin: 0 !important;
-    padding: 0 !important;
+
+/* Remove dotted underline from links */
+a {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+a:hover {
+  border-bottom-color: transparent !important;
 }
 
-/* X Logo Image Styles */
-body #x-logo img {
-    width: 20px !important; /* Smaller size */
-    height: auto !important;
-    display: block !important;
-    transition: transform 0.3s, opacity 0.3s !important; /* Smooth hover effect */
-    margin: 0 !important;
-    padding: 0 !important;
+/* Remove hover highlight for X link */
+ul.icons li a.no-circle:hover {
+  background-color: transparent !important;
+  box-shadow: none !important; /* if you see a ring or shadow on hover */
 }
-
-/* Hover Effect */
-body #x-logo img:hover {
-    transform: scale(1.1); /* Slightly enlarges the logo */
-    opacity: 0.8; /* Reduces opacity slightly */
-}
-
-
 
