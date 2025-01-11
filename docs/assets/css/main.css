@@ -702,8 +702,8 @@ input, select, textarea {
 				width: 100%;
 			}
 			
-			/* Specific adjustment for #work image */
-			#work .image.main img {
+			/* Specific adjustment for #pool-stats image */
+			#pool-stats .image.main img {
 				width: 100%; /* Full width of the container */
 				height: auto; /* Maintain aspect ratio */
 				max-height: 200px; /* Adjust downward height as needed */
@@ -732,7 +732,7 @@ input, select, textarea {
 				}
 			
 				/* Optional adjustments for smaller screens */
-				#work .image.main img,
+				#pool-stats .image.main img,
 				#intro .image.main img,
 				#about .image.main img {
 					max-height: 400px; /* Further reduce height on smaller devices */
@@ -745,7 +745,7 @@ input, select, textarea {
 				}
 			
 				/* Optional adjustments for very small screens */
-				#work .image.main img,
+				#pool-stats .image.main img,
 				#intro .image.main img,
 				#about .image.main img {
 					max-height: 300px; /* Further reduce height for very small devices */
