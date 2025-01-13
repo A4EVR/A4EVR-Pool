@@ -30,7 +30,7 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
 
 **Estimated Completion Time**
 - Using an existing cardano-node: <5 minutes.
-- Deploying a new cardano-node with Mithril bootstrapping: ~1 hour.
+- Deploying a new cardano-node with Mithril bootstrapping: ~45 minutes.
 
 ## Prerequisites
 

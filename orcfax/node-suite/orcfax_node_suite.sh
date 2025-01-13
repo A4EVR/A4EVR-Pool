@@ -395,7 +395,7 @@ welcome() {
     echo
     echo "**Estimated Completion Time**"
     echo "   - Using an existing cardano-node: <5 minutes."
-    echo "   - Deploying a new cardano-node with Mithril bootstrapping: ~1 hour."
+    echo "   - Deploying a new cardano-node with Mithril bootstrapping: ~45 minutes."
     echo
     echo "Please follow the prompts carefully. You can exit the script anytime by pressing Ctrl+C."
     echo
