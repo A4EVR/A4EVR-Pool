@@ -71,7 +71,8 @@ The Orcfax Node Suite is a simple all-in-one solution designed to quickly deploy
    - `docker-ce-cli`
    - `containerd.io`
    - `docker-compose-plugin`
-    
+   - `zstd`
+   
     Enter a unique node name (e.g., `node1`). Choose base directory (e.g., `~/orcfax`). This will make a directory `~/orcfax/<your-node-name>`.
 
     **Cardano-node Setup:**
@@ -101,7 +102,7 @@ Upon completion, a summary config log and helpful commands are outputted in the 
 
 **v1.1.0** 
 - Updated Mithril logic to handle new `.tar.zst` format and no `import` subcommand. 
-- Added `ztsd` to dependency check. 
+- Added `zstd` to dependency check. 
 - Enhanced `detect_node_socket` to show multiple possible sockets. 
 - Improved `deploy_cardano_ogmios_container` logic. 
 - Refactors to `setup_ogmios`, `generate_docker_compose`, `run_docker_compose`, and `write_log_file`.
