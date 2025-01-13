@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Orcfax Node Suite Script by A4EVR
-# Version: 1.1.0
+# Version: 1.0.0
 
 # ---------------------------------------------
 # Global Variables Set Dynamically
@@ -15,8 +15,8 @@ KEYS_DIR=""                    # User enters directory containing their alias pa
 SOCKET_PATH=""                 # Path to cardano-node node.socket (local or shared volume), detected by script or user defined
 ORCFAX_IMAGE_NAME=""           # Docker image name for Orcfax collector
 ORCFAX_CONTAINER_NAME=""       # Collector container name
-STANDALONE_OGMIOS_CONTAINER="" # Name for new standalone Ogmios instance, otherwise null (used for deployment logic)
-OGMIOS_URL=""		           # Ogmios endpoint, dynamically set by script or user defined
+STANDALONE_OGMIOS_CONTAINER=""       # Name for new standalone Ogmios instance, otherwise null (used for deployment logic)
+OGMIOS_URL=""		       # Ogmios endpoint, dynamically set by script or user defined
 CARDANO_OGMIOS_CONTAINER=""    # Combined Cardano-node + Ogmios container name (for new cardano-node)
 MITHRIL_CONTAINER_NAME=""      # Used to bootstrap the shared DB if new cardano-node is selected
 ACTIVE_OGMIOS_CONTAINER=""     # Tracks the active Ogmios container, either existing or newly deployed, null if custom endpoint (used for deployment logic)
@@ -65,11 +65,12 @@ GENESIS_KEY_URL="https://raw.githubusercontent.com/input-output-hk/mithril/main/
 #    3.5. deploy_cardano_ogmios_container
 #    3.6. setup_cardano_node (Top-Level Function)
 # 4. Ogmios Setup Functions
-#    4.1. reuse_existing_ogmios
-#    4.2. prepare_standalone_ogmios
+#    4.1. handle_ogmios_containers
+#    4.2. deploy_or_reuse_instance
 #    4.3. prompt_custom_endpoint
-#    4.4. display_ogmios_containers
-#    4.5. setup_ogmios (Top-Level Function)
+#    4.4. prepare_standalone_ogmios
+#    4.5. display_containers
+#    4.6. setup_ogmios (Top-Level Function)
 # 5. Orcfax Collector Setup Functions
 #    5.1. setup_directories
 #    5.2. get_keys_directory
@@ -126,16 +127,17 @@ detect_node_socket() {
     done
 
     # Remove duplicates and clean up
-    FOUND_PATHS=($(printf "%s\n" "${FOUND_PATHS[@]}" | sort -u | sed '/^$/d'))
+    UNIQUE_PATHS=$(printf "%s\n" "${FOUND_PATHS[@]}" | sort -u | sed '/^$/d')
 
-    if [[ ${#FOUND_PATHS[@]} -eq 0 ]]; then
-        # No sockets found
+    # Handle cases based on the number of paths found
+    if [[ -z "$UNIQUE_PATHS" ]]; then
         echo "No node.socket file detected in common directories."
         echo "If using a containerized Cardano-node, ensure the node.socket is accessible as a shared/mounted path."
         read -p "Enter the full path to your node.socket: " CUSTOM_PATH
         if [[ -S "$CUSTOM_PATH" ]]; then
             SOCKET_PATH="$CUSTOM_PATH"
             echo "Using custom node.socket path: $SOCKET_PATH"
+            echo
         else
             echo "ERROR: The specified path is not a valid socket file. Please verify and try again."
             exit 1
@@ -143,38 +145,57 @@ detect_node_socket() {
         return
     fi
 
-    # Build selection array: all found paths plus option for a custom path
-    OPTIONS=("${FOUND_PATHS[@]}" "Enter custom path")
+    # Single path found
+    if [[ $(echo "$UNIQUE_PATHS" | wc -l) -eq 1 ]]; then
+        SOCKET_PATH=$(echo "$UNIQUE_PATHS")
+        echo "Found node.socket at: $SOCKET_PATH"
+        read -p "Do you want to use this socket? (y/n): " RESPONSE
+        if [[ "$RESPONSE" != "y" ]]; then
+            read -p "Enter the full path to your node.socket: " CUSTOM_PATH
+            if [[ -S "$CUSTOM_PATH" ]]; then
+                SOCKET_PATH="$CUSTOM_PATH"
+                echo "Using custom node.socket path: $SOCKET_PATH"
+                echo
+            else
+                echo "ERROR: The specified path is not a valid socket file. Please verify and try again."
+                exit 1
+            fi
+        fi
+        echo "Using node.socket at: $SOCKET_PATH"
+        return
+    fi
 
-    echo "Found the following node.socket path(s)."
-    echo "Please select your choice (e.g., 1):"
-    PS3="Your choice: "
-
+    # Multiple paths found
+    PS3="Select the correct node.socket path or specify a custom one: "
+    OPTIONS=($(echo "$UNIQUE_PATHS") "Specify custom path")
+    echo "Multiple node.socket files detected. Please select one from the list below:"
     select CHOICE in "${OPTIONS[@]}"; do
-        case "$CHOICE" in
-            "Enter custom path")
+        case $CHOICE in
+            "Specify custom path")
                 read -p "Enter the full path to your node.socket: " CUSTOM_PATH
                 if [[ -S "$CUSTOM_PATH" ]]; then
                     SOCKET_PATH="$CUSTOM_PATH"
                     echo "Using custom node.socket path: $SOCKET_PATH"
+                    echo
                 else
                     echo "ERROR: The specified path is not a valid socket file. Please verify and try again."
                     exit 1
                 fi
                 break
                 ;;
-            "")
-                echo "Invalid selection. Please try again."
-                ;;
             *)
-                # User picked one of the found paths
-                SOCKET_PATH="$CHOICE"
-                echo "Using node.socket at: $SOCKET_PATH"
+                if [[ -n "$CHOICE" ]]; then
+                    SOCKET_PATH="$CHOICE"
+                    echo "Using node.socket at: $SOCKET_PATH"
+                    echo
+                else
+                    echo "Invalid selection. Exiting."
+                    exit 1
+                fi
                 break
                 ;;
         esac
     done
-    echo
 }
 
 # Port Management Function
@@ -428,9 +449,7 @@ install_dependencies() {
     sudo apt-get update -y
 
     # Define dependencies
-    local apt_dependencies=(curl git jq apt-transport-https ca-certificates \
-                        software-properties-common docker-ce docker-ce-cli \
-                        containerd.io docker-compose-plugin zstd)
+    local apt_dependencies=(curl git jq apt-transport-https ca-certificates software-properties-common docker-ce docker-ce-cli containerd.io docker-compose-plugin)
 
     # Check and install apt-based dependencies
     for package in "${apt_dependencies[@]}"; do
@@ -570,7 +589,6 @@ setup_cardano_db() {
 setup_mithril() {
     echo "Setting up Mithril container for fast Cardano database bootstrapping..."
 
-    # Prompt 
     if ! confirm "Do you want to proceed with Mithril?"; then
         echo "Skipping Mithril."
         echo
@@ -584,7 +602,7 @@ setup_mithril() {
         exit 1
     fi
 
-    # If DB is empty or <100GB, handle it
+    # Check if the DB directory contains data
     if [ "$(ls -A "$CARDANO_DB_DIR" 2>/dev/null)" ]; then
         CURRENT_DB_SIZE_MB=$(du -sm "$CARDANO_DB_DIR" | awk '{print $1}' || echo 0)
         if [[ "$CURRENT_DB_SIZE_MB" -ge 100000 ]]; then
@@ -593,22 +611,25 @@ setup_mithril() {
             return
         else
             echo "DB directory has data but is less than 100GB. Preparing for Mithril unpacking..."
+
+            # Define Mithril container name here since process will proceed
             MITHRIL_CONTAINER_NAME="mithril-client"
+
+            # Check and clean up existing Mithril client
             manage_container "$MITHRIL_CONTAINER_NAME" "remove"
+
+            # Clear the directory to prepare for Mithril unpacking
             manage_directory "$CARDANO_DB_DIR" "overwrite"
         fi
     else
         echo "DB directory is empty. Proceeding with Mithril setup..."
-        MITHRIL_CONTAINER_NAME="mithril-client"
-        manage_container "$MITHRIL_CONTAINER_NAME" "remove"
     fi
 
-    # List snapshots and parse the latest digest
+    # Fetch snapshot list and select the latest snapshot
     echo "Fetching the latest snapshot list from the Mithril Aggregator..."
     RAW_OUTPUT=$(docker run --rm \
         -e AGGREGATOR_ENDPOINT="$AGGREGATOR_ENDPOINT" \
-        "$MITHRIL_DOCKER_IMAGE" \
-        cardano-db snapshot list)
+        "$MITHRIL_DOCKER_IMAGE" cardano-db snapshot list)
 
     local LATEST_SNAPSHOT
     LATEST_SNAPSHOT=$(echo "$RAW_OUTPUT" | tr -d '\r' | grep -oE '[0-9a-f]{64}' | head -n 1)
@@ -620,57 +641,45 @@ setup_mithril() {
     fi
 
     echo "Latest Snapshot Digest: $LATEST_SNAPSHOT"
-    echo "Retrieving detailed info for snapshot..."
 
-    # Show snapshot details to find .tar.zst link
-    local SHOW_OUTPUT
-    SHOW_OUTPUT=$(docker run --rm \
-        -e AGGREGATOR_ENDPOINT="$AGGREGATOR_ENDPOINT" \
-        "$MITHRIL_DOCKER_IMAGE" \
-        cardano-db snapshot show "$LATEST_SNAPSHOT")
-
-    local SNAPSHOT_URL
-    # Attempt grep -A1 for multi-line
-    SNAPSHOT_URL=$(echo "$SHOW_OUTPUT" \
-      | grep -A1 '^| Location' \
-      | grep -oE 'https://[^ ]+\.tar\.zst' || true)
-
-    # If still empty, fallback to simpler approach
-    if [[ -z "$SNAPSHOT_URL" ]]; then
-        SNAPSHOT_URL=$(echo "$SHOW_OUTPUT" \
-          | grep 'Location' \
-          | grep -oE 'https://[^ ]+\.tar\.zst' || true)
-    fi
-
-    if [[ -z "$SNAPSHOT_URL" ]]; then
-        echo "ERROR: Could not find a .tar.zst 'Location' in snapshot show output."
-        echo "Raw output: $SHOW_OUTPUT"
-        exit 1
-    fi
-
-    echo "Found snapshot tarball URL: $SNAPSHOT_URL"
-
-    # Final confirmation
-    if ! confirm "Download and extract this snapshot now?"; then
+    if ! confirm "Do you want to proceed with this snapshot?"; then
         echo "Aborted by user. Exiting."
         exit 0
     fi
 
-    echo
     echo "Starting the snapshot download and then unpacking, this may take a while..."
-    echo "Press Ctrl+C to cancel at any time."
+    deploy_container "$MITHRIL_CONTAINER_NAME" "$MITHRIL_DOCKER_IMAGE" \
+        "" \
+        "-v $CARDANO_DB_DIR:/app/db" \
+        "-e GENESIS_VERIFICATION_KEY=$GENESIS_VERIFICATION_KEY -e AGGREGATOR_ENDPOINT=$AGGREGATOR_ENDPOINT"
+
+    # Monitor progress and wait for the container to stop
+    echo
+    TOTAL_DB_SIZE_MB=$((205 * 1024)) # 205 GB aribtrary value used to estimate/display progress of Mithril
+
+    while docker ps --format '{{.Names}}' | grep -q "$MITHRIL_CONTAINER_NAME"; do
+        CURRENT_SIZE_MB=$(du -sm "$CARDANO_DB_DIR" | awk '{print $1}' || echo 0)
+
+        # Calculate percentage
+        PERCENTAGE=$((CURRENT_SIZE_MB * 100 / TOTAL_DB_SIZE_MB))
+        PERCENTAGE=$((PERCENTAGE > 100 ? 100 : PERCENTAGE)) # Clamp to 0-100
+
+        # Display approximate progress
+        printf "\r*Approximate* Progress: %3d%%" "$PERCENTAGE"
+
+        sleep 5
+    done
     echo
 
-    # Download + extract the .tar.zst snapshot, make sure 'tar' supports '-I zstd' for Zstandard
-    if ! curl -L "$SNAPSHOT_URL" | tar -I zstd -xf - -C "$CARDANO_DB_DIR"; then
+    # Validate container logs for success
+    if docker logs "$MITHRIL_CONTAINER_NAME" | grep -q "successfully checked against Mithril multi-signature"; then
+        echo "Mithril snapshot successfully downloaded, verified, and applied."
         echo
-        echo "ERROR: Failed to download or extract snapshot from: $SNAPSHOT_URL"
+    else
+        echo "ERROR: Mithril snapshot process failed or did not complete as expected."
+        docker logs "$MITHRIL_CONTAINER_NAME"
         exit 1
     fi
-
-    echo
-    echo "Mithril snapshot successfully downloaded and extracted into $CARDANO_DB_DIR."
-    echo
 }
 
 # Helper Functions for cardano-ogmios container deployment
@@ -716,7 +725,6 @@ run_cardano_ogmios_container() {
     fi
 }
 
-# Allow cardano-node to initialize and generate node.socket
 wait_for_socket() {
     local socket_path=$1
     local timeout=$2
@@ -756,9 +764,6 @@ deploy_cardano_ogmios_container() {
         CARDANO_IPC_DIR="$CARDANO_DB_DIR/ipc"
     fi
 
-    # Handle container conflicts
-    manage_container "$CARDANO_OGMIOS_CONTAINER" "remove"
-
     # Find available ports
     local relay_port
     local ekg_port
@@ -769,7 +774,10 @@ deploy_cardano_ogmios_container() {
     ekg_port=$(manage_port "find" 12788 12800)
     prometheus_port=$(manage_port "find" 12798 12810)
 
-    # Use helper run_cardano_ogmios_container
+    # Handle container conflicts
+    manage_container "$CARDANO_OGMIOS_CONTAINER" "remove"
+
+    # Delegate to run_cardano_ogmios_container
     run_cardano_ogmios_container "$CARDANO_OGMIOS_CONTAINER" "$relay_port" "$CARDANO_DB_VOLUME" "$CARDANO_IPC_DIR" "$ekg_port" "$prometheus_port"
 
     # Set this container as the active Ogmios container
@@ -788,9 +796,6 @@ setup_cardano_node() {
     echo
 
     if [[ "$CARDANO_NODE_CHOICE" == "existing" ]]; then
-        # Explicitly set “cardano_ogmios_container” to null to avoid any previous run conflicts
-        CARDANO_OGMIOS_CONTAINER=""
-        
         detect_node_socket
         echo "Existing cardano-node configured successfully."
         echo
@@ -808,53 +813,81 @@ setup_cardano_node() {
 # ------------------------
 
 # Helper Functions for Ogmios setup
-reuse_existing_ogmios() {
-    local containers=("$@")
+handle_ogmios_containers() {
+    local ogmios_containers=("$@")
 
-    echo "Select the container to use:"
-    PS3="Your choice: "
-    select c in "${containers[@]}"; do
-        if [[ -n "$c" ]]; then
-            ACTIVE_OGMIOS_CONTAINER="$c"
-            # Use port helper
+    echo "Detected the following Ogmios container(s):"
+    display_containers "${ogmios_containers[@]}"
+
+    PS3="Choose an action: "
+    options=("Re-use an existing Ogmios instance" "Deploy a new standalone Ogmios instance" "Specify a custom Ogmios endpoint")
+    select opt in "${options[@]}"; do
+        case $opt in
+            "Re-use an existing Ogmios instance")
+                deploy_or_reuse_instance "${ogmios_containers[@]}"
+                return
+                ;;
+            "Deploy a new standalone Ogmios instance")
+                prepare_standalone_ogmios
+                return
+                ;;
+            "Specify a custom Ogmios endpoint")
+                prompt_custom_endpoint
+                return
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
+}
+
+deploy_or_reuse_instance() {
+    local ogmios_containers=("$@")
+
+    PS3="Select the container to use (e.g., 1): "
+    select container in "${ogmios_containers[@]}"; do
+        if [[ -n "$container" ]]; then
+            ACTIVE_OGMIOS_CONTAINER="$container"
             OGMIOS_PORT=$(manage_port container "" "" "" "$ACTIVE_OGMIOS_CONTAINER")
             OGMIOS_URL="ws://localhost:${OGMIOS_PORT}"
-            echo "Using existing Ogmios container: $ACTIVE_OGMIOS_CONTAINER ($OGMIOS_URL)."
+            echo "Using existing Ogmios container: $ACTIVE_OGMIOS_CONTAINER on $OGMIOS_URL."
             echo
             return
         else
-            echo "Invalid choice. Try again."
+            echo "Invalid selection. Try again."
         fi
     done
+}
+
+prompt_custom_endpoint() {
+    read -p "Enter the full Ogmios endpoint (e.g., ws://localhost:1337): " OGMIOS_URL
+    echo "Using custom Ogmios endpoint: $OGMIOS_URL and skipping container setup."
+    echo
+    ACTIVE_OGMIOS_CONTAINER=""
 }
 
 prepare_standalone_ogmios() {
     STANDALONE_OGMIOS_CONTAINER="ogmios_$NODE_NAME"
 
-    # Remove if the container name conflicts
+    # Handle container conflicts
     manage_container "$STANDALONE_OGMIOS_CONTAINER" "remove"
 
-    # Find a free port in the range 1337–1350
+    # Assign an available port for the new Ogmios instance
     OGMIOS_PORT=$(manage_port find 1337 1350)
     OGMIOS_URL="ws://localhost:${OGMIOS_PORT}"
 
+    echo "Standalone Ogmios container will be created in final deployment."
     ACTIVE_OGMIOS_CONTAINER="$STANDALONE_OGMIOS_CONTAINER"
-    echo "Standalone Ogmios container '$ACTIVE_OGMIOS_CONTAINER' will be created in final deployment."
-    echo "Assigned Ogmios URL: $OGMIOS_URL"
     echo
 }
 
-prompt_custom_endpoint() {
-    read -p "Enter the full Ogmios endpoint (e.g., ws://localhost:1337): " OGMIOS_URL
-    echo "Using custom Ogmios endpoint: $OGMIOS_URL (no container will be managed)."
-    ACTIVE_OGMIOS_CONTAINER=""
-    echo
-}
-
-display_ogmios_containers() {
+display_containers() {
     local containers=("$@")
     for i in "${!containers[@]}"; do
-        echo "$((i + 1))) ${containers[i]}"
+        if [[ -n "${containers[i]}" ]]; then
+            echo "$((i + 1))) ${containers[i]}"
+        fi
     done
     echo
 }
@@ -864,61 +897,30 @@ setup_ogmios() {
     echo -e "\033[1;32m#### Ogmios Setup ####\033[0m"
     echo
 
-    # If user chose to deploy a NEW combined cardano-node + Ogmios container,then skip standalone Ogmios
     if [[ "$CARDANO_NODE_CHOICE" == "new" ]]; then
         echo "New Cardano-Ogmios container will be deployed. Skipping Ogmios setup."
         ACTIVE_OGMIOS_CONTAINER="$CARDANO_OGMIOS_CONTAINER"
         OGMIOS_PORT=$(manage_port container "" "" "" "$ACTIVE_OGMIOS_CONTAINER")
         OGMIOS_URL="ws://localhost:${OGMIOS_PORT}"
-        echo "Using Ogmios within $ACTIVE_OGMIOS_CONTAINER on $OGMIOS_URL."
+        echo "Using Ogmios instance within $ACTIVE_OGMIOS_CONTAINER on $OGMIOS_URL."
         echo
         return
     fi
 
-    # 1) Detect existing Ogmios containers (by name containing 'ogmios')
+    # Detect existing Ogmios containers
     local ogmios_containers
     ogmios_containers=($(docker ps --filter "name=ogmios" --format "{{.Names}}" | sed '/^$/d'))
 
-    # If none found, either deploy new or prompt for custom endpoint
     if [[ ${#ogmios_containers[@]} -eq 0 ]]; then
-        echo "No Ogmios containers found."
-        if confirm "Do you want to deploy a new standalone Ogmios container now?"; then
+        echo "No Ogmios containers found. You can create a new instance or enter a custom endpoint."
+        if confirm "Do you want to deploy a new standalone Ogmios instance?"; then
             prepare_standalone_ogmios
         else
             prompt_custom_endpoint
         fi
-        return
+    else
+        handle_ogmios_containers "${ogmios_containers[@]}"
     fi
-
-    # 2) If containers are found, present a menu:
-    echo "Detected the following Ogmios container(s):"
-    display_ogmios_containers "${ogmios_containers[@]}"
-
-    local options=()
-    options+=("Re-use an existing Ogmios container")
-    options+=("Deploy a new standalone Ogmios container")
-    options+=("Specify a custom Ogmios endpoint")
-
-    PS3="Select your Ogmios option: "
-    select opt in "${options[@]}"; do
-        case "$opt" in
-            "Re-use an existing Ogmios container")
-                reuse_existing_ogmios "${ogmios_containers[@]}"
-                break
-                ;;
-            "Deploy a new standalone Ogmios container")
-                prepare_standalone_ogmios
-                break
-                ;;
-            "Specify a custom Ogmios endpoint")
-                prompt_custom_endpoint
-                break
-                ;;
-            *)
-                echo "Invalid selection. Please try again."
-                ;;
-        esac
-    done
 }
 
 # ------------------------
@@ -1149,55 +1151,51 @@ setup_orcfax_collector() {
 generate_docker_compose() {
     echo "Creating docker-compose.yml for $NODE_NAME..."
 
-    # If the user sets STANDALONE_OGMIOS_CONTAINER, add that service to Compose.
-    # Otherwise, assume Ogmios is either newly deployed combined container (already running) or a custom/externally managed endpoint
-
-    local STANDALONE_SOCKET_BINDING=""
-    if [[ -n "$STANDALONE_OGMIOS_CONTAINER" ]]; then
-        STANDALONE_SOCKET_BINDING="$SOCKET_PATH:/ipc/node.socket"
-    fi
-
-    cat <<EOF > "$COMPOSE_FILE"
+    # Generate configuration based on Ogmios setup
+    if [[ -z "$STANDALONE_OGMIOS_CONTAINER" ]]; then
+        # No standalone Ogmios service included (custom endpoint or existing container reused)
+        cat > "$COMPOSE_FILE" <<EOL
 services:
-$( 
-# If STANDALONE_OGMIOS_CONTAINER is set, insert the standalone Ogmios service
-if [[ -n "$STANDALONE_OGMIOS_CONTAINER" ]]; then
-cat <<OGMIOS
-  $STANDALONE_OGMIOS_CONTAINER:
-    image: $STANDALONE_OGMIOS_IMAGE
-    container_name: $STANDALONE_OGMIOS_CONTAINER
-    ports:
-      - "$OGMIOS_PORT:1337"
-    volumes:
-      - $STANDALONE_SOCKET_BINDING
-    command:
-      - --node-socket=/ipc/node.socket
-      - --node-config=/config/mainnet/cardano-node/config.json
-      - --host=0.0.0.0
-      - --port=$OGMIOS_PORT
-    restart: unless-stopped
-
-OGMIOS
-fi
-)
-
-  $ORCFAX_CONTAINER_NAME:
+  orcfax_collector:
     build:
-      context: $NODE_DIR
-    image: $ORCFAX_IMAGE_NAME
-    container_name: $ORCFAX_CONTAINER_NAME
-$( 
-if [[ -n "$STANDALONE_OGMIOS_CONTAINER" ]]; then
-cat <<DEPENDS
-    depends_on:
-      - $STANDALONE_OGMIOS_CONTAINER
-DEPENDS
-fi
-)
+      context: ${NODE_DIR}
+    image: ${ORCFAX_IMAGE_NAME}
+    container_name: ${ORCFAX_CONTAINER_NAME}
     environment:
-      - OGMIOS_URL=$OGMIOS_URL
+      - OGMIOS_URL=${OGMIOS_URL}
     restart: unless-stopped
-EOF
+EOL
+    else
+        # Include standalone Ogmios service in the Docker Compose file
+        SOCKET_BINDING="$SOCKET_PATH:/ipc/node.socket"
+        cat > "$COMPOSE_FILE" <<EOL
+services:
+  ogmios:
+    image: ${STANDALONE_OGMIOS_IMAGE}
+    container_name: ${STANDALONE_OGMIOS_CONTAINER}
+    ports:
+      - "${OGMIOS_PORT}:1337"
+    volumes:
+      - ${SOCKET_BINDING}
+    command:
+        - --node-socket=/ipc/node.socket
+        - --node-config=/config/mainnet/cardano-node/config.json
+        - --host=0.0.0.0
+        - --port=${OGMIOS_PORT}
+    restart: unless-stopped
+
+  orcfax_collector:
+    build:
+      context: ${NODE_DIR}
+    image: ${ORCFAX_IMAGE_NAME}
+    container_name: ${ORCFAX_CONTAINER_NAME}
+    depends_on:
+      - ogmios
+    environment:
+      - OGMIOS_URL=${OGMIOS_URL}
+    restart: unless-stopped
+EOL
+    fi
 
     echo "docker-compose.yml successfully created at $COMPOSE_FILE."
     echo
@@ -1226,6 +1224,7 @@ build_orcfax_image() {
 run_docker_compose() {
     echo "Starting containers using Docker Compose..."
 
+    # Start the Docker Compose process
     if ! docker compose -f "$COMPOSE_FILE" up -d; then
         echo "ERROR: Failed to start Docker containers with Docker Compose. Exiting."
         exit 1
@@ -1234,14 +1233,15 @@ run_docker_compose() {
     echo "Docker Compose started successfully. Verifying containers..."
     local CONTAINERS=("${ORCFAX_CONTAINER_NAME}")
 
-    # If there's a standalone Ogmios container in Compose, verify it's running too
+    # Add Ogmios container only if it's a standalone deployment managed by the script
     if [[ -n "$STANDALONE_OGMIOS_CONTAINER" ]]; then
-        CONTAINERS+=("$STANDALONE_OGMIOS_CONTAINER")
+        CONTAINERS+=("${STANDALONE_OGMIOS_CONTAINER}")
     fi
 
-    for c in "${CONTAINERS[@]}"; do
-        if ! manage_container "$c" "running"; then
-            echo "ERROR: Container $c is not running or failed to start. Check logs."
+    # Verify that all required containers are running
+    for CONTAINER in "${CONTAINERS[@]}"; do
+        if ! manage_container "$CONTAINER" "running"; then
+            echo "ERROR: Container $CONTAINER is not running or failed to start. Check logs."
             exit 1
         fi
     done
@@ -1267,15 +1267,11 @@ write_log_file() {
     LOG_FILE="$BASE_DIR/$NODE_NAME-config.log"
 
     {
-        # Intro + heading
-        cat <<INTRO
-# Orcfax Node Deployment Configuration Log
-# This log file was generated automatically by the Orcfax Node Deployment script.
+        echo "# Orcfax Node Deployment Configuration Log"
+        echo "# This log file was generated automatically by the Orcfax Node Deployment script."
+        echo ""
 
-# Configuration Variables:
-INTRO
-
-        # Loop through the selected variables and echo them
+        echo "# Configuration Variables:"
         for var in CARDANO_NODE_CHOICE BASE_DIR NODE_NAME NODE_DIR KEYS_DIR SOCKET_PATH \
                    ORCFAX_IMAGE_NAME ORCFAX_CONTAINER_NAME STANDALONE_OGMIOS_CONTAINER \
                    OGMIOS_URL CARDANO_OGMIOS_CONTAINER ACTIVE_OGMIOS_CONTAINER \
@@ -1286,45 +1282,39 @@ INTRO
             echo "$var=\"${!var}\""
         done
 
-        # Main commands and info block
-        cat <<COMMANDS
+        echo ""
+        echo "# Useful Commands"
+        echo "## Verify containers:"
+        echo "docker ps -a"
+        echo "docker stats"
+        echo ""
+        echo "## Verify processes:"
+        echo "docker exec -it $ORCFAX_CONTAINER_NAME ps aux"
+        echo "docker top $ACTIVE_OGMIOS_CONTAINER"
+        echo ""
+        echo "## Verify cron in the collector node ($ORCFAX_CONTAINER_NAME):"
+        echo "docker exec -it $ORCFAX_CONTAINER_NAME ps aux | grep cron"
+        echo "docker exec -it $ORCFAX_CONTAINER_NAME tail -f /var/log/cron.log"
+        echo ""
+        echo "## Display collector log (tailing the log):"
+        echo "docker exec -it $ORCFAX_CONTAINER_NAME tail -f /var/log/collector_node.log"
+        echo ""
+        echo "Health check details for Orcfax collector container:"
+        echo "  - Ensures the 'collector-node' process is running."
+        echo "  - Confirms the '.node-identity.json' file exists in '/tmp'."
+        echo ""
+        echo "## Verify Ogmios is active and connected to cardano-node:"
+        echo "curl -H 'Accept: application/json' $OGMIOS_URL/health | jq"
+        echo "View in browser: $OGMIOS_URL"
+        echo ""
+        echo "## Review and remove unused Docker images"
+        echo "docker images"
+        echo "docker image prune -a"
+        echo ""
 
-# Useful Commands
-## Verify containers:
-docker ps -a
-docker stats
-
-## Verify processes:
-docker exec -it $ORCFAX_CONTAINER_NAME ps aux
-docker top $ACTIVE_OGMIOS_CONTAINER
-
-## Verify cron in the collector node ($ORCFAX_CONTAINER_NAME):
-docker exec -it $ORCFAX_CONTAINER_NAME ps aux | grep cron
-docker exec -it $ORCFAX_CONTAINER_NAME tail -f /var/log/cron.log
-
-## Display collector log (tailing the log):
-docker exec -it $ORCFAX_CONTAINER_NAME tail -f /var/log/collector_node.log
-
-Health check details for Orcfax collector container:
-  - Ensures the 'collector-node' process is running.
-  - Confirms the '.node-identity.json' file exists in '/tmp'.
-
-## Verify Ogmios is active and connected to cardano-node:
-curl -H 'Accept: application/json' $OGMIOS_URL/health | jq
-View in browser: $OGMIOS_URL
-
-## Review and remove unused Docker images
-docker images
-docker image prune -a
-COMMANDS
-
-        # If "new" was chosen, add an extra snippet for cardano-node
         if [[ "$CARDANO_NODE_CHOICE" == "new" ]]; then
-            cat <<NEWNODE
-
-## Cardano-node System Commands:
-docker logs -f $ACTIVE_OGMIOS_CONTAINER
-NEWNODE
+            echo "## Cardano-node System Commands:"
+            echo "docker logs -f $ACTIVE_OGMIOS_CONTAINER"
         fi
     } > "$LOG_FILE"
 
@@ -1383,3 +1373,5 @@ final_deployment
 
 # Step 6: Generate logs and display deployment notes
 final_logging
+
+

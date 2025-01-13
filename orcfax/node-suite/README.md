@@ -99,9 +99,15 @@ Upon completion, a summary config log and helpful commands are outputted in the 
 
 ## Changelog
 
-v1.0.0:
-Initial release of Orcfax Node Suite script. Includes support for Cardano-node, Ogmios, and the Orcfax collector.
+**v1.1.0** 
+- Updated Mithril logic to handle new `.tar.zst` format and no `import` subcommand. 
+- Added `ztsd` to dependency check. 
+- Enhanced `detect_node_socket` to show multiple possible sockets. 
+- Improved `deploy_cardano_ogmios_container` logic. 
+- Refactors to `setup_ogmios`, `generate_docker_compose`, `run_docker_compose`, and `write_log_file`.
 
+**v1.0.0** 
+Initial release of Orcfax Node Suite script. Includes support for Cardano-node, Ogmios, and the Orcfax collector.
 
 
 ## Happy Collecting!
