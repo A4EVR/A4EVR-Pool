@@ -3,9 +3,9 @@
 
 This document covers:
 
-Prometheus & Grafana installation.
-Orcfax Exporter installation & systemd service config.
-Orcfax ITN Dashboard implementation.
+- Prometheus & Grafana installation.
+- Orcfax Exporter installation & systemd service config.
+- Orcfax ITN Dashboard implementation.
     
 
 ## 1. Install Prometheus & Grafana
@@ -132,20 +132,20 @@ RestartSec=10
 [Install]
 WantedBy=multi-user.target
 ```
-Flag format for 1 license and log path:
+
+- Flag format for 1 license and log path:
 
 --licenses 001: Single license number.
 --log-paths /var/log/syslog: Local logs.
     
 
-
-Format for multiple licenses on same local host (comma separate licenses and log paths):
+- Format for multiple licenses on same local host (comma separate licenses and log paths):
 
 --licenses 001,002
 --log-paths /var/log/syslog,/var/log/syslog
 
 
-Or if one license is Docker-based:
+- Or if one license is Docker-based:
 
 --licenses 001,002
 --log-paths /var/log/syslog,/var/log/docker/orcfax_<node_name>/collector_node.log
