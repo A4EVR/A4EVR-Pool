@@ -138,10 +138,12 @@ Flag format for 1 license and log path:
 --log-paths /var/log/syslog: Local logs.
     
 
+
 Format for multiple licenses on same local host (comma separate licenses and log paths):
 
 --licenses 001,002
 --log-paths /var/log/syslog,/var/log/syslog
+
 
 Or if one license is Docker-based:
 
@@ -179,15 +181,12 @@ Default credentials: admin/admin.
 
 Go to: Configuration > Data Sources > Add data source > Prometheus.
     
-Prometheus Metrics:
-
-    http://localhost:9090
 
 
 Get and Import the Orcfax ITN Dashboard
 
-cd ~/orcfax
-wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/refs/heads/main/orcfax/monitoring/Orcfax-ITN-A4EVR.json
+    cd ~/orcfax
+    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/refs/heads/main/orcfax/monitoring/Orcfax-ITN-A4EVR.json
 
 
 In Grafana, go to Dashboard > Import.
