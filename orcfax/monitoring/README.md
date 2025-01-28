@@ -9,10 +9,10 @@ Orcfax Exporter installation & systemd service config.
 
 Install Prometheus
 
-```bash
-sudo apt update
-sudo apt install -y prometheus
-```
+
+    sudo apt update
+    sudo apt install -y prometheus
+
 
 Once installed, Prometheus typically runs as a systemd service:
     /lib/systemd/system/prometheus.service
@@ -41,7 +41,7 @@ sudo systemctl start grafana-server
 Check status:
 
 ```bash
-    systemctl status grafana-server
+systemctl status grafana-server
 ```
 
 Grafana listens on port 3000. Visit http://localhost:3000.
@@ -49,7 +49,11 @@ Default credentials: admin/admin.
 
 ## 2. Configure Prometheus
 
-Prometheus stores its config in `/etc/prometheus/prometheus.yml`. It has one scrape_configs: section that lists all jobs. If you installed via apt, you’ll see something like:
+Prometheus stores its config in `/etc/prometheus/prometheus.yml`. 
+
+    sudo nano /etc/prometheus/prometheus.yml
+
+There is one scrape_configs section that lists all jobs. If a fresh install, you’ll see something like:
 
 ```bash
 scrape_configs:
@@ -58,8 +62,9 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 
-### Add Orcfax Exporter Job
+Add the Orcfax Exporter Job
 
+If you already have other jobs, just add the new one under the same list.
 Append (under the same scrape_configs: key) an additional job:
 
 ```bash
@@ -73,7 +78,7 @@ scrape_configs:
       - targets: ['localhost:9101']
 ```
 
-If you already have other jobs, just add the new one under the same list.
+
 If your exporter will run on a remote machine, you can replace 'localhost:9101' with e.g. '192.168.1.10:9101'.
 
 Restart Prometheus:
