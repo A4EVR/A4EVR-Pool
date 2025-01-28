@@ -151,6 +151,7 @@ WantedBy=multi-user.target
 --log-paths /var/log/syslog,/var/log/docker/orcfax_<node_name>/collector_node.log
 
 
+
 Enable & Start the Exporter
 
     sudo systemctl daemon-reload
@@ -195,7 +196,7 @@ Upload or paste the JSON dashboard, select Prometheus data source.
 
 ## 6. Verification & Notes
 
-Verifying Locally
+### Verifying Locally
 
 Open `http://localhost:9090/targets` in Prometheus UI.
 You should see orcfax_exporter as UP.
@@ -203,13 +204,15 @@ You should see orcfax_exporter as UP.
 Metrics shown at `http://localhost:9101/metrics`.
 
 
-Remote Machines & Secure Access
+### Enable Alerts when node is down. Edit the Collector Node Status panel by adding a new alert rule. Set to notify when value is below 1 (0 = down). Set notification channel Slack, email etc.
+
+### Remote Machines & Secure Access
 
 If you want to centralize data from multiple remote machines, each runs its own Orcfax Exporter.
 Prometheus can scrape them all by adding each IP to static_configs.
 Optionally secure it with a VPN or tunneling (e.g., WireGuard).
 
-Docker-based Orcfax Node
+### Docker-based Orcfax Node
 
 If your collector node logs are in /var/log/docker/orcfax_<node_name>/collector_node.log, pass that path to --log-paths
 
