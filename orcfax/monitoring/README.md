@@ -1,14 +1,16 @@
-# Orcfax Exporter Setup Guide 
+# Orcfax Exporter Setup Guide
+## Orcfax Collector version 2.0.1-rc.1
 
 This document covers:
 
 Prometheus & Grafana installation.
 Orcfax Exporter installation & systemd service config.
+Orcfax ITN Dashboard implementation.
     
+
 ## 1. Install Prometheus & Grafana
 
 Install Prometheus
-
 
     sudo apt update
     sudo apt install -y prometheus
@@ -20,32 +22,25 @@ Once installed, Prometheus typically runs as a systemd service:
 By default, it listens on port 9090.
 Check status with:
 
-```bash
     systemctl status prometheus
-```
+
 
 Install Grafana
 
-```bash
-sudo apt update
-sudo apt install -y grafana
-```
+    sudo apt update
+    sudo apt install -y grafana
+
    
 Start & enable it at boot:
 
-```bash
-sudo systemctl enable grafana-server
-sudo systemctl start grafana-server
-```
+    sudo systemctl enable grafana-server
+    sudo systemctl start grafana-server
+
 
 Check status:
 
-```bash
-systemctl status grafana-server
-```
+    systemctl status grafana-server
 
-Grafana listens on port 3000. Visit http://localhost:3000.
-Default credentials: admin/admin.
 
 ## 2. Configure Prometheus
 
@@ -83,43 +78,38 @@ If your exporter will run on a remote machine, you can replace 'localhost:9101' 
 
 Restart Prometheus:
 
-```bash
-sudo systemctl restart prometheus
-```
+    sudo systemctl restart prometheus
+
 
 ## 3. Download & Configure the Orcfax Exporter
 
 Download the Exporter Script
 
-```bash
-mkdir -p ~/orcfax
-cd ~/orcfax
-wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/refs/heads/main/orcfax/monitoring/orcfax_exporter.py
-chmod +x orcfax_exporter.py
-```
+    mkdir -p ~/orcfax
+    cd ~/orcfax
+    wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/refs/heads/main/orcfax/monitoring/orcfax_exporter.py
+    chmod +x orcfax_exporter.py
+
 
 Install Python
 
-```bash
-sudo apt install -y python3 python3-venv python3-pip
-```
+    sudo apt install -y python3 python3-venv python3-pip
+
 
 Create Python Virtual Env
 
-```bash
-python3 -m venv orcfax_env
-source orcfax_env/bin/activate
-pip install prometheus_client
-deactivate
-```
+    python3 -m venv orcfax_env
+    source orcfax_env/bin/activate
+    pip install prometheus_client
+    deactivate
+
 
 ## 4. Run Orcfax Exporter as a Systemd Service
 
 Create systemd config file
 
-```bash
-sudo nano /etc/systemd/system/orcfax_exporter.service
-```
+    sudo nano /etc/systemd/system/orcfax_exporter.service
+
 
 Copy below into the service file (replace <your_user> and license number <001>):
 
@@ -156,48 +146,53 @@ Format for multiple licenses on same local host (comma separate licenses and log
 Or if one license is Docker-based:
 
 --licenses 001,002
- --log-paths /var/log/syslog,/var/log/docker/orcfax_<node_name>/collector_node.log
+--log-paths /var/log/syslog,/var/log/docker/orcfax_<node_name>/collector_node.log
 
 
 Enable & Start the Exporter
 
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable orcfax_exporter
-sudo systemctl start orcfax_exporter
-```
+    sudo systemctl daemon-reload
+    sudo systemctl enable orcfax_exporter
+    sudo systemctl start orcfax_exporter
+
 
 Check status:
 
-```bash
-systemctl status orcfax_exporter
-```
+    systemctl status orcfax_exporter
+
 
 The exporter now listens on port 9101.
+
 
 ## 5. Configure & Use Grafana
 
 Start Grafana & Add Prometheus Data Source
 
-```bash
-sudo systemctl enable grafana-server
-sudo systemctl start grafana-server
-```
-Access `http://localhost:3000`.
-Configuration > Data Sources > Add data source > Prometheus.
+    sudo systemctl enable grafana-server
+    sudo systemctl start grafana-server
+
+Grafana listens on port 3000. Visit:
     
-URL: `http://localhost:9090` > Save & Test.
+    http://localhost:3000
 
-Import Orcfax Dashboard
+Default credentials: admin/admin.
 
-Get Orcfax ITN dashboard.
+Go to: Configuration > Data Sources > Add data source > Prometheus.
+    
+Prometheus Metrics:
 
-```bash
+    http://localhost:9090
+
+
+Get and Import the Orcfax ITN Dashboard
+
 cd ~/orcfax
 wget https://raw.githubusercontent.com/A4EVR/A4EVR-Pool/refs/heads/main/orcfax/monitoring/Orcfax-ITN-A4EVR.json
-```
+
+
 In Grafana, go to Dashboard > Import.
-Upload or paste the JSON, select Prometheus data source.
+Upload or paste the JSON dashboard, select Prometheus data source.
+
 
 ## 6. Verification & Notes
 
